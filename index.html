@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gauntlet Vault Allocations - Sankey Charts</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #001F3F 0%, #003366 100%);
+            min-height: 100vh;
+            padding: 60px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+        
+        .subtitle {
+            font-size: 20px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #0052FF;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .chart-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 82, 255, 0.3);
+        }
+        
+        .chart-type {
+            display: inline-block;
+            background: #E8F2FF;
+            color: #0052FF;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+        }
+        
+        .chart-type.v2 {
+            background: #7B61FF;
+            color: white;
+        }
+        
+        .chart-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+        
+        .chart-description {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .chart-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .stat {
+            font-size: 13px;
+        }
+        
+        .stat-label {
+            color: #9ca3af;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .stat-value {
+            color: #0052FF;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .cta {
+            display: inline-block;
+            background: #0052FF;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 16px;
+            transition: background 0.2s;
+        }
+        
+        .chart-card:hover .cta {
+            background: #003FCC;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            color: white;
+            opacity: 0.7;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gauntlet Vault Allocations</h1>
+            <p class="subtitle">Interactive Sankey Charts for Capital Flow Visualization</p>
+            <span class="badge">Morpho Protocol</span>
+        </header>
+        
+        <div class="charts-grid">
+            <!-- V2 Multi-Level Chart -->
+            <a href="/gauntlet-usdc-frontier-v2-multilevel.html" class="chart-card">
+                <span class="chart-type v2">V2 Vault</span>
+                <h2 class="chart-title">USDC Frontier V2</h2>
+                <p class="chart-description">
+                    Multi-level allocation showing V2 → V1 → Markets flow with utilization metrics
+                </p>
+                <div class="chart-stats">
+                    <div class="stat">
+                        <span class="stat-label">Total TVL</span>
+                        <span class="stat-value">$57.92M</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Markets</span>
+                        <span class="stat-value">12</span>
+                    </div>
+                </div>
+                <span class="cta">View Chart →</span>
+            </a>
+            
+            <!-- Prime Vaults -->
+            <a href="/gauntlet-usdc-prime.html" class="chart-card">
+                <span class="chart-type">Prime Vault</span>
+                <h2 class="chart-title">USDC Prime</h2>
+                <p class="chart-description">
+                    Low-risk strategy with blue-chip collateral markets
+                </p>
+                <div class="chart-stats">
+                    <div class="stat">
+                        <span class="stat-label">Total TVL</span>
+                        <span class="stat-value">$177.48M</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Markets</span>
+                        <span class="stat-value">3</span>
+                    </div>
+                </div>
+                <span class="cta">View Chart →</span>
+            </a>
+            
+            <a href="/gauntlet-weth-prime.html" class="chart-card">
+                <span class="chart-type">Prime Vault</span>
+                <h2 class="chart-title">WETH Prime</h2>
+                <p class="chart-description">
+                    Risk-adjusted yield across liquid staking markets
+                </p>
+                <div class="chart-stats">
+                    <div class="stat">
+                        <span class="stat-label">Total TVL</span>
+                        <span class="stat-value">$72.37M</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Markets</span>
+                        <span class="stat-value">5</span>
+                    </div>
+                </div>
+                <span class="cta">View Chart →</span>
+            </a>
+        </div>
+        
+        <footer>
+            <p>Gauntlet Vault Allocation Visualizations • Updated January 21, 2026</p>
+        </footer>
+    </div>
+</body>
+</html>

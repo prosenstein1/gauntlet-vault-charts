@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gauntlet USDC Prime - Market Allocations</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #ffffff;
+            padding: 40px 20px;
+            margin: 0;
+        }
+        
+        #chart-container {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 48px;
+            max-width: 1400px;
+            margin: 0 auto;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+        
+        .header {
+            border-bottom: 2px solid #1e40af;
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+        }
+        
+        h1 {
+            color: #111827;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+        
+        .vault-name {
+            color: #1e40af;
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            color: #6b7280;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+        
+        .metric-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 16px 20px;
+        }
+        
+        .metric-label {
+            color: #6b7280;
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+        
+        .metric-value {
+            color: #111827;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .metric-value.primary {
+            color: #1e40af;
+        }
+        
+        #sankey {
+            margin: 32px 0;
+        }
+        
+        .footer {
+            margin-top: 32px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-left {
+            color: #6b7280;
+            font-size: 13px;
+        }
+        
+        .footer-right {
+            color: #9ca3af;
+            font-size: 12px;
+        }
+        
+        .branding {
+            color: #1e40af;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div id="chart-container">
+        <div class="header">
+            <h1><span class="vault-name">Gauntlet USDC Prime</span> — Market Allocation Analysis</h1>
+            <div class="subtitle">Capital Distribution Across Lending Markets</div>
+            
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-label">Total Deployed</div>
+                    <div class="metric-value primary">$177.48M</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Active Markets</div>
+                    <div class="metric-value">3</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Idle Capital</div>
+                    <div class="metric-value">$0.00</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Network</div>
+                    <div class="metric-value">Ethereum Mainnet</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="sankey"></div>
+        
+        <div class="footer">
+            <div class="footer-left">
+                Data as of January 21, 2026 • All figures in USD
+            </div>
+            <div class="footer-right">
+                <span class="branding">Gauntlet</span> Capital Allocation Visualization
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Market data from screenshot
+        var markets = [
+            ["cbBTC / USDC", 122.02],
+            ["WBTC / USDC", 31.09],
+            ["wstETH / USDC", 24.39]
+        ];
+
+        // Build node labels
+        var labels = ["USDC Prime"];
+        for (var i = 0; i < markets.length; i++) {
+            var val = markets[i][1];
+            var label = markets[i][0] + " — $" + val.toFixed(2) + "M";
+            labels.push(label);
+        }
+
+        // Build links
+        var source = [];
+        var target = [];
+        var value = [];
+        for (var i = 0; i < markets.length; i++) {
+            source.push(0);
+            target.push(i + 1);
+            value.push(markets[i][1]);
+        }
+
+        // Professional institutional color palette
+        var professionalColors = [
+            "#1e40af", "#3b82f6", "#60a5fa"
+        ];
+
+        var nodeColors = ["#1e40af"];
+        var linkColors = [];
+        
+        for (var i = 0; i < markets.length; i++) {
+            var color = professionalColors[i % professionalColors.length];
+            nodeColors.push(color);
+            
+            var hex = color.replace("#", "");
+            var r = parseInt(hex.substring(0, 2), 16);
+            var g = parseInt(hex.substring(2, 4), 16);
+            var b = parseInt(hex.substring(4, 6), 16);
+            linkColors.push("rgba(" + r + "," + g + "," + b + ",0.4)");
+        }
+
+        var data = [{
+            type: "sankey",
+            orientation: "h",
+            node: {
+                pad: 18,
+                thickness: 28,
+                line: {
+                    color: "#e5e7eb",
+                    width: 1
+                },
+                label: labels,
+                color: nodeColors,
+                font: {
+                    family: 'Inter, sans-serif',
+                    size: 12,
+                    color: "#ffffff",
+                    weight: 500
+                }
+            },
+            link: {
+                source: source,
+                target: target,
+                value: value,
+                color: linkColors
+            }
+        }];
+
+        var layout = {
+            font: {
+                family: 'Inter, sans-serif',
+                size: 12,
+                color: "#374151"
+            },
+            paper_bgcolor: "#ffffff",
+            plot_bgcolor: "#ffffff",
+            margin: { l: 10, r: 10, t: 10, b: 10 },
+            height: 600
+        };
+
+        var config = {
+            responsive: true,
+            displayModeBar: false
+        };
+
+        Plotly.newPlot('sankey', data, layout, config);
+    </script>
+</body>
+</html>
